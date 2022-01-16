@@ -1,4 +1,4 @@
-.content {
+.block {
     display: flex;
     flex-direction: column;
     max-width: 1024px;
@@ -6,4 +6,19 @@
     padding: 30px;
     background-color: #FAFAFA;
     height: calc(100vh - 60px);
+}
+
+.messageForm {
+    display: flex;
+    margin: 10px;
+    align-items: end;
+}
+
+.messageText {
+    flex: 100 400px;
+    margin-right: 10px;
+}
+
+.messageBtn {
+    flex: 0 0;
 }

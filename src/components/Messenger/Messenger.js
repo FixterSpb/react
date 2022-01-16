@@ -1,14 +1,55 @@
-import React from 'react';
-import {Message} from './components';
-import styles from './Messenger.module.css'
+import React, {useEffect, useState} from "react";
+import styles from './Messenger.module.css';
+import {MessageList} from "./components";
 
-export const Messenger = ({messages}) => {
+const DEFAULT_MESSAGE_BOT = 'Сообщение бота';
+const USER_NAME = 'user';
+const BOT_NAME = 'bot';
+const TIMEOUT = 1500;
+let timeoutId = null;
+
+export function Messenger() {
+
+    const [messageList, setMessageList] = useState([]);
+    const [messageText, setMessageText] = useState('');
+
+    const sendMessage = () => {
+        if (messageText.trim().length === 0) return
+
+        setMessageList([...messageList, {
+            author: USER_NAME,
+            text: messageText
+        }]);
+        setMessageText('');
+    }
+
+    const sendMessageFromBot = () => {
+        setMessageList([...messageList, {
+            author: BOT_NAME,
+            text: DEFAULT_MESSAGE_BOT
+        }])
+    }
+
+    useEffect(() => {
+        if (messageList.length === 0) return;
+        if (messageList[messageList.length - 1].author === 'bot') return;
+
+        timeoutId = setTimeout(sendMessageFromBot, TIMEOUT);
+
+        return () => clearTimeout(timeoutId);
+
+    }, [messageList]);
+
+
+    const inputMessageHandler = ({target}) => { setMessageText(target.value) }
+
     return (
-    <div className={styles.content} >
-        {messages.map((text, idx) =>
-            <Message text={text} isPrimary={idx % 2 === 0} key={idx}/>
-        )}
-    </div>
-)
-
-};
+        <div className={styles.block}>
+            <MessageList messages={messageList} userName={USER_NAME}/>
+            <div className={styles.messageForm}>
+                <textarea className={styles.messageText} value={messageText} onChange={inputMessageHandler}/>
+                <button onClick={sendMessage}>Отправить</button>
+            </div>
+        </div>
+    )
+}
