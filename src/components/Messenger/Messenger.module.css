@@ -1,0 +1,9 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #FAFAFA;
+    height: calc(100vh - 60px);
+}
