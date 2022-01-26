@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styles from './Messenger.module.css';
 import {MessageList} from "./components";
 
@@ -12,6 +12,7 @@ export function Messenger() {
 
     const [messageList, setMessageList] = useState([]);
     const [messageText, setMessageText] = useState('');
+    const inputRef = useRef(null);
 
     const sendMessage = () => {
         if (messageText.trim().length === 0) return
@@ -43,11 +44,20 @@ export function Messenger() {
 
     const inputMessageHandler = ({target}) => { setMessageText(target.value) }
 
+    useEffect(() => {
+        inputRef.current?.focus();
+    })
+
     return (
         <div className={styles.block}>
             <MessageList messages={messageList} userName={USER_NAME}/>
             <div className={styles.messageForm}>
-                <textarea className={styles.messageText} value={messageText} onChange={inputMessageHandler}/>
+                <textarea
+                    className={styles.messageText}
+                    value={messageText}
+                    onChange={inputMessageHandler}
+                    ref={inputRef}
+                />
                 <button onClick={sendMessage}>Отправить</button>
             </div>
         </div>
